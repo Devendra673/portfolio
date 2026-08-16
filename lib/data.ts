@@ -37,8 +37,13 @@ export const siteConfig = {
   linkedin: "https://www.linkedin.com/in/devendra-664a02306",
   location: "Bangalore, India",
   availability: "Open to full-time roles · Remote or on-site",
-  /** Set NEXT_PUBLIC_SITE_URL in Vercel once the domain is known. */
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://devendra-portfolio.vercel.app",
+  /**
+   * Canonical site URL, used for metadata, sitemap, robots and OG images.
+   * Override with NEXT_PUBLIC_SITE_URL if the domain changes.
+   */
+  url:
+    process.env.NEXT_PUBLIC_SITE_URL ??
+    "https://portfolio-three-rho-wr6pjej6uv.vercel.app",
 };
 
 export const roles = [
