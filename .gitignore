@@ -43,6 +43,9 @@ yarn-error.log*
 CLAUDE.md
 /.kiro
 
+# resume working draft (the built PDF in public/ is what ships)
+Resume-Devendra-ATS.txt
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
