@@ -39,8 +39,9 @@ yarn-error.log*
 # spare screenshots kept locally, not part of the site
 /screenshots-unused
 
-# AI assistant tooling config
+# AI assistant / editor tooling config
 CLAUDE.md
+/.kiro
 
 # typescript
 *.tsbuildinfo
