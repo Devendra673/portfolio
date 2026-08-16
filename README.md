@@ -2,7 +2,7 @@
 
 Personal portfolio site. Single-page, dark-first, with a WebGL particle background.
 
-**Live:** _add URL after deploying_
+**Live:** https://devendra-dev.vercel.app
 
 ## Stack
 

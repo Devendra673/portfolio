@@ -41,9 +41,7 @@ export const siteConfig = {
    * Canonical site URL, used for metadata, sitemap, robots and OG images.
    * Override with NEXT_PUBLIC_SITE_URL if the domain changes.
    */
-  url:
-    process.env.NEXT_PUBLIC_SITE_URL ??
-    "https://portfolio-three-rho-wr6pjej6uv.vercel.app",
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://devendra-dev.vercel.app",
 };
 
 export const roles = [
