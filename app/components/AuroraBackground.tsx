@@ -4,10 +4,9 @@
  * Neon Dusk background.
  *
  * Three layers, all CSS-driven so there's no per-frame JS and no WebGL:
- *   1. Aurora — large soft light pools that drift slowly, like neon haze
- *      hanging over a city at night.
- *   2. Skyline — abstract vertical light bars along the bottom edge,
- *      suggesting distant lit windows without drawing literal buildings.
+ *   1. Aurora — large soft light pools drifting on long offset cycles.
+ *   2. Light bars — abstract vertical gradients along the bottom edge with a
+ *      slow brightness flicker.
  *   3. Grid — a faint perspective grid for structure.
  *
  * Every layer is decorative and hidden from assistive tech. Motion is
@@ -35,12 +34,12 @@ const AuroraBackground = () => {
       {/* Perspective grid */}
       <div className="bg-grid absolute inset-0" />
 
-      {/* Skyline of distant window lights */}
+      {/* Vertical light bars */}
       <div className="absolute bottom-0 left-0 right-0 flex h-[22vh] items-end justify-between gap-[0.35vw] px-[2vw]">
         {bars.map((bar, i) => (
           <span
             key={i}
-            className="skyline-bar flex-1 rounded-t-[2px]"
+            className="light-bar flex-1 rounded-t-[2px]"
             style={{
               height: `${bar.height}%`,
               opacity: bar.opacity,

@@ -189,7 +189,7 @@ a.btn-neon:active {
 }
 
 /* ---------------------------------------------------------------
-   Background: aurora light pools, skyline bars, perspective grid
+   Background: aurora light pools, light bars, perspective grid
    --------------------------------------------------------------- */
 
 .aurora {
@@ -268,10 +268,10 @@ a.btn-neon:active {
   -webkit-mask-image: linear-gradient(to bottom, #000 0%, transparent 75%);
 }
 
-/* Distant window lights along the bottom edge.
+/* Vertical light bars along the bottom edge.
    Flicker animates brightness rather than opacity, so it doesn't fight the
    per-bar opacity set inline on each element. */
-.skyline-bar {
+.light-bar {
   background: linear-gradient(
     to top,
     var(--accent) 0%,

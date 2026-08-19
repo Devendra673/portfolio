@@ -4,9 +4,38 @@ import { motion } from "framer-motion";
 import { ArrowRight, ExternalLink } from "lucide-react";
 import { projects } from "@/lib/data";
 import { cn } from "@/lib/utils";
+import { useScrollSkew } from "@/lib/useScrollSkew";
 import ProjectPreview from "./ProjectPreview";
 
+const GithubMark = ({ size = 13 }: { size?: number }) => (
+  <svg
+    aria-hidden
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="currentColor"
+  >
+    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z" />
+  </svg>
+);
+
 const Projects = () => {
+  const skew = useScrollSkew(2);
+
+  // Featured project leads the grid
+  const ordered = [...projects].sort(
+    (a, b) => Number(Boolean(b.featured)) - Number(Boolean(a.featured))
+  );
+
+  /**
+   * Bento spans across a 6-column grid:
+   *   row 1 -> featured (4) + narrow (2)
+   *   row 2 -> half (3) + half (3)
+   * Falls back to half width for any extra projects added later.
+   */
+  const SPANS = ["md:col-span-4", "md:col-span-2", "md:col-span-3", "md:col-span-3"];
+
   return (
     <section id="projects" className="px-6 py-28">
       <div className="mx-auto max-w-6xl">
@@ -19,7 +48,7 @@ const Projects = () => {
           <p className="section-label text-xs font-medium uppercase tracking-widest text-muted-foreground">
             Selected Work
           </p>
-          <p className="mt-4 max-w-xl text-sm text-muted-foreground">
+          <p className="mt-6 max-w-xl text-sm text-muted-foreground">
             Four systems spanning document intelligence, IoT telemetry, speech
             processing and secure retrieval. Two are open source; the others are
             private, and I&apos;m happy to walk through the architecture on
@@ -27,132 +56,144 @@ const Projects = () => {
           </p>
         </motion.div>
 
-        <div className="grid gap-5 md:grid-cols-2">
-          {projects.map((project, index) => (
-            <motion.article
-              key={project.title}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.08 }}
-              viewport={{ once: true }}
-              className="neon-card group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-card/40 backdrop-blur-sm"
-            >
-              {/* Accent bar */}
-              <span
-                aria-hidden
+        {/* Bento grid: featured tile spans both columns */}
+        <div className="grid auto-rows-auto grid-cols-1 gap-4 md:grid-cols-6">
+          {ordered.map((project, index) => {
+            const featured = Boolean(project.featured);
+
+            return (
+              <motion.article
+                key={project.title}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.07 }}
+                viewport={{ once: true }}
+                style={{ skewY: skew }}
                 className={cn(
-                  "absolute inset-x-0 top-0 z-10 h-px bg-gradient-to-r opacity-40 transition-opacity duration-300 group-hover:opacity-100",
-                  project.accent
+                  "neon-card group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-card/40 backdrop-blur-sm",
+                  SPANS[index] ?? "md:col-span-3"
                 )}
-              />
-
-              {/* Hover-revealed screenshot */}
-              {project.image && (
-                <ProjectPreview
-                  src={project.image.src}
-                  alt={project.image.alt}
-                  projectTitle={project.title}
-                  accent={project.accent}
+              >
+                {/* Accent hairline */}
+                <span
+                  aria-hidden
+                  className={cn(
+                    "absolute inset-x-0 top-0 z-10 h-px bg-gradient-to-r opacity-40 transition-opacity duration-300 group-hover:opacity-100",
+                    project.accent
+                  )}
                 />
-              )}
 
-              <div className="flex flex-1 flex-col p-6 sm:p-7">
-                {/* Meta row */}
-                <div className="mb-4 flex items-center justify-between gap-3">
-                  <span className="font-mono text-[10px] uppercase tracking-widest text-primary">
-                    {project.domain}
-                  </span>
-                  <span className="whitespace-nowrap rounded-full border border-border px-2.5 py-0.5 text-[10px] font-medium text-muted-foreground">
-                    {project.role}
-                  </span>
-                </div>
+                <div
+                  className={cn(
+                    "flex flex-1 flex-col",
+                    // Featured tile is wide enough to place the preview beside
+                    // the copy once there's room for it
+                    featured && "lg:grid lg:grid-cols-2 lg:items-stretch"
+                  )}
+                >
+                  {project.image && (
+                    <ProjectPreview
+                      src={project.image.src}
+                      alt={project.image.alt}
+                      projectTitle={project.title}
+                      accent={project.accent}
+                    />
+                  )}
 
-                <h3 className="text-xl font-bold tracking-tight text-foreground">
-                  {project.title}
-                </h3>
+                  <div className="flex flex-1 flex-col p-6 sm:p-7">
+                    <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
+                      <span className="font-mono text-[10px] uppercase tracking-widest text-primary">
+                        {project.domain}
+                      </span>
+                      <span className="whitespace-nowrap rounded-full border border-border px-2.5 py-0.5 text-[10px] font-medium text-muted-foreground">
+                        {project.role}
+                      </span>
+                    </div>
 
-                <p className="mt-2.5 text-sm leading-relaxed text-muted-foreground">
-                  {project.description}
-                </p>
-
-                {/* Highlights */}
-                <ul className="mt-5 space-y-2">
-                  {project.highlights.map((item) => (
-                    <li
-                      key={item}
-                      className="flex gap-2.5 text-[13px] leading-relaxed text-muted-foreground"
+                    <h3
+                      className={cn(
+                        "font-bold tracking-tight text-foreground",
+                        featured ? "text-2xl sm:text-3xl" : "text-xl"
+                      )}
                     >
-                      <ArrowRight
-                        size={13}
-                        aria-hidden
-                        className="mt-1 shrink-0 text-primary/60"
-                      />
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
+                      {project.title}
+                    </h3>
 
-                {/* Engineering note */}
-                <div className="mt-5 rounded-xl border border-border/60 bg-muted/40 p-4">
-                  <p className="mb-1.5 font-mono text-[10px] uppercase tracking-widest text-muted-foreground/70">
-                    Hardest part
-                  </p>
-                  <p className="text-[13px] leading-relaxed text-muted-foreground">
-                    {project.challenge}
-                  </p>
-                </div>
+                    <p className="mt-2.5 text-sm leading-relaxed text-muted-foreground">
+                      {project.description}
+                    </p>
 
-                {/* Tech */}
-                <div className="mt-auto flex flex-wrap gap-2 pt-6">
-                  {project.tech.map((tech) => (
-                    <span
-                      key={tech}
-                      className="rounded-full border border-border px-2.5 py-0.5 text-[10px] font-medium text-muted-foreground transition-colors duration-300 group-hover:border-primary/30 group-hover:text-primary"
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-
-                {/* Links */}
-                {(project.sourceUrl || project.liveUrl) && (
-                  <div className="mt-5 flex items-center gap-5 border-t border-border/60 pt-4">
-                    {project.sourceUrl && (
-                      <a
-                        href={project.sourceUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground transition-colors hover:text-primary"
-                      >
-                        <svg
-                          aria-hidden
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="13"
-                          height="13"
-                          viewBox="0 0 24 24"
-                          fill="currentColor"
+                    {/* Featured tile shows all highlights; others show three */}
+                    <ul className="mt-5 space-y-2">
+                      {(featured
+                        ? project.highlights
+                        : project.highlights.slice(0, 3)
+                      ).map((item) => (
+                        <li
+                          key={item}
+                          className="flex gap-2.5 text-[13px] leading-relaxed text-muted-foreground"
                         >
-                          <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z" />
-                        </svg>
-                        View source
-                      </a>
-                    )}
-                    {project.liveUrl && (
-                      <a
-                        href={project.liveUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground transition-colors hover:text-primary"
-                      >
-                        <ExternalLink size={13} aria-hidden />
-                        Live demo
-                      </a>
+                          <ArrowRight
+                            size={13}
+                            aria-hidden
+                            className="mt-1 shrink-0 text-primary/60"
+                          />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+
+                    <div className="mt-5 rounded-xl border border-border/60 bg-muted/40 p-4">
+                      <p className="mb-1.5 font-mono text-[10px] uppercase tracking-widest text-muted-foreground/70">
+                        Hardest part
+                      </p>
+                      <p className="text-[13px] leading-relaxed text-muted-foreground">
+                        {project.challenge}
+                      </p>
+                    </div>
+
+                    <div className="mt-auto flex flex-wrap gap-2 pt-6">
+                      {project.tech.map((tech) => (
+                        <span
+                          key={tech}
+                          className="rounded-full border border-border px-2.5 py-0.5 text-[10px] font-medium text-muted-foreground transition-colors duration-300 group-hover:border-primary/30 group-hover:text-primary"
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+
+                    {(project.sourceUrl || project.liveUrl) && (
+                      <div className="mt-5 flex items-center gap-5 border-t border-border/60 pt-4">
+                        {project.sourceUrl && (
+                          <a
+                            href={project.sourceUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground transition-colors hover:text-primary"
+                          >
+                            <GithubMark />
+                            View source
+                          </a>
+                        )}
+                        {project.liveUrl && (
+                          <a
+                            href={project.liveUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1.5 text-xs font-medium text-muted-foreground transition-colors hover:text-primary"
+                          >
+                            <ExternalLink size={13} aria-hidden />
+                            Live demo
+                          </a>
+                        )}
+                      </div>
                     )}
                   </div>
-                )}
-              </div>
-            </motion.article>
-          ))}
+                </div>
+              </motion.article>
+            );
+          })}
         </div>
       </div>
     </section>

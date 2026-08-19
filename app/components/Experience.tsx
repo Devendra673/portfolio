@@ -3,8 +3,11 @@
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { experience } from "@/lib/data";
+import { useScrollSkew } from "@/lib/useScrollSkew";
 
 const Experience = () => {
+  const skew = useScrollSkew(1.5);
+
   return (
     <section id="experience" className="px-6 py-28">
       <div className="mx-auto max-w-5xl">
@@ -25,6 +28,7 @@ const Experience = () => {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: i * 0.08 }}
               viewport={{ once: true }}
+              style={{ skewY: skew }}
               className="neon-card group rounded-2xl border border-border bg-card/40 p-6 backdrop-blur-sm sm:p-8"
             >
               {/* Header */}

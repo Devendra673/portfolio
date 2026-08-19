@@ -12,12 +12,131 @@ export interface Project {
   accent: string;
   /** Preview screenshot revealed on card hover. Files live in /public/projects/. */
   image?: { src: string; alt: string };
+  /** Featured projects occupy a larger tile in the bento grid. */
+  featured?: boolean;
 }
 
-export interface Skill {
-  category: string;
-  items: string[];
+/**
+ * Proficiency tiers, borrowed from the confidence-tier vocabulary used in
+ * SecureHall-RAG (HIGH / MODERATE / LOW). Reusing that language here keeps the
+ * design system rooted in my own work rather than being decorative.
+ */
+export type SkillLevel = "core" | "strong" | "familiar";
+
+export const skillLevelMeta: Record<
+  SkillLevel,
+  { label: string; description: string }
+> = {
+  core: { label: "Core", description: "Daily driver, used in production work" },
+  strong: { label: "Strong", description: "Shipped features with it" },
+  familiar: { label: "Familiar", description: "Working knowledge" },
+};
+
+export type SkillGroup =
+  | "language"
+  | "frontend"
+  | "backend"
+  | "ai"
+  | "infra";
+
+export const skillGroupMeta: Record<SkillGroup, { label: string }> = {
+  language: { label: "Languages" },
+  frontend: { label: "Frontend" },
+  backend: { label: "Backend" },
+  ai: { label: "AI / ML" },
+  infra: { label: "Infra" },
+};
+
+export interface SkillNode {
+  id: string;
+  label: string;
+  group: SkillGroup;
+  level: SkillLevel;
 }
+
+/** Nodes for the skills constellation. */
+export const skillNodes: SkillNode[] = [
+  // Languages
+  { id: "python", label: "Python", group: "language", level: "core" },
+  { id: "ts", label: "TypeScript", group: "language", level: "core" },
+  { id: "js", label: "JavaScript", group: "language", level: "core" },
+  { id: "sql", label: "SQL", group: "language", level: "strong" },
+  { id: "cpp", label: "C++", group: "language", level: "familiar" },
+  { id: "java", label: "Java", group: "language", level: "familiar" },
+
+  // Frontend
+  { id: "react", label: "React", group: "frontend", level: "core" },
+  { id: "next", label: "Next.js", group: "frontend", level: "core" },
+  { id: "tailwind", label: "Tailwind", group: "frontend", level: "core" },
+  { id: "zustand", label: "Zustand", group: "frontend", level: "familiar" },
+
+  // Backend
+  { id: "fastapi", label: "FastAPI", group: "backend", level: "core" },
+  { id: "flask", label: "Flask", group: "backend", level: "strong" },
+  { id: "node", label: "Node.js", group: "backend", level: "familiar" },
+  { id: "sqlite", label: "SQLite", group: "backend", level: "strong" },
+  { id: "postgres", label: "PostgreSQL", group: "backend", level: "familiar" },
+
+  // AI / ML
+  { id: "rag", label: "RAG", group: "ai", level: "core" },
+  { id: "faiss", label: "FAISS", group: "ai", level: "core" },
+  { id: "bm25", label: "BM25", group: "ai", level: "strong" },
+  { id: "sklearn", label: "scikit-learn", group: "ai", level: "strong" },
+  { id: "whisper", label: "Whisper", group: "ai", level: "strong" },
+  { id: "nli", label: "NLI / DeBERTa", group: "ai", level: "strong" },
+  { id: "bedrock", label: "AWS Bedrock", group: "ai", level: "strong" },
+  { id: "ollama", label: "Ollama", group: "ai", level: "strong" },
+  { id: "sbert", label: "Sentence Transformers", group: "ai", level: "strong" },
+
+  // Infra
+  { id: "docker", label: "Docker", group: "infra", level: "strong" },
+  { id: "git", label: "Git", group: "infra", level: "core" },
+  { id: "aws", label: "AWS", group: "infra", level: "familiar" },
+  { id: "esp32", label: "ESP32", group: "infra", level: "familiar" },
+];
+
+/**
+ * Edges describe how I actually combine these tools, not arbitrary links.
+ * Hovering a node lights up the path it belongs to.
+ */
+export const skillEdges: ReadonlyArray<readonly [string, string]> = [
+  // Python stack
+  ["python", "fastapi"],
+  ["python", "flask"],
+  ["python", "sklearn"],
+  ["python", "whisper"],
+  // Retrieval pipeline
+  ["fastapi", "rag"],
+  ["rag", "faiss"],
+  ["rag", "bm25"],
+  ["rag", "nli"],
+  ["faiss", "sbert"],
+  ["rag", "ollama"],
+  ["rag", "bedrock"],
+  // Frontend stack
+  ["ts", "react"],
+  ["react", "next"],
+  ["next", "tailwind"],
+  ["react", "zustand"],
+  ["js", "react"],
+  // Data
+  ["fastapi", "sqlite"],
+  ["flask", "sqlite"],
+  ["sql", "postgres"],
+  ["sql", "sqlite"],
+  // Infra
+  ["docker", "fastapi"],
+  ["docker", "flask"],
+  ["aws", "bedrock"],
+  ["git", "docker"],
+  // Hardware
+  ["cpp", "esp32"],
+  ["esp32", "flask"],
+  // Cross links
+  ["next", "fastapi"],
+  ["ts", "next"],
+  ["java", "sql"],
+];
 
 export interface SocialLink {
   name: string;
@@ -177,29 +296,11 @@ export const projects: Project[] = [
       "Binary hallucination filtering throws away usable answers — a claim with 60% support is neither a fact nor a lie. I replaced hard accept/reject with four-tier soft redaction: well-supported claims pass untouched, mid-range claims carry visible warning flags, and only genuine contradictions below 0.25 entailment are redacted. A sentence-type classifier skips non-claim sentences, cutting verification overhead by roughly 40%.",
     tech: ["FastAPI", "Next.js", "FAISS", "Ollama", "NLI", "BM25"],
     accent: "from-amber-400 to-orange-400",
+    featured: true,
     image: {
       src: "/projects/securehall-chat.png",
       alt: "SecureHall-RAG chat interface with ten policy documents loaded in the knowledge base and suggested starter questions",
     },
-  },
-];
-
-export const skills: Skill[] = [
-  {
-    category: "Languages",
-    items: ["TypeScript", "JavaScript", "Python", "C++", "SQL"],
-  },
-  {
-    category: "Frontend",
-    items: ["React", "Next.js", "Tailwind CSS", "HTML/CSS"],
-  },
-  {
-    category: "Backend & AI/ML",
-    items: ["FastAPI", "Flask", "FAISS", "scikit-learn", "Whisper", "RAG"],
-  },
-  {
-    category: "Tools & DevOps",
-    items: ["Git", "Docker", "AWS Bedrock", "Ollama", "SQLite", "Arduino"],
   },
 ];
 
@@ -208,6 +309,16 @@ export const about = {
     "I build intelligent systems that bridge machine learning and real users — from NLP pipelines and secure RAG to IoT platforms and speech tech.",
   subtext:
     "Python ML backends • TypeScript frontends • C++ edge firmware • Containerized deployments. I take problems from raw data to polished interfaces.",
+};
+
+/**
+ * Oversized statement that scrolls horizontally between sections.
+ * Split into lines so each can move at a slightly different rate.
+ */
+export const kineticStatement = {
+  lines: ["SYSTEMS THAT KNOW", "WHEN THEY'RE WRONG"],
+  caption:
+    "Confidence scoring, abstention, and verification — the parts that matter once a model leaves the notebook.",
 };
 
 export const marqueeItems = [
