@@ -18,7 +18,9 @@ import CommandPalette from "./components/CommandPalette";
 
 export default function Home() {
   return (
-    <div className="noise">
+    // overflow-x-hidden guards against the intentionally oversized kinetic
+    // statement ever producing a horizontal page scrollbar
+    <div className="noise overflow-x-hidden">
       <BootSequence />
       <AuroraBackground />
       <CursorRing />

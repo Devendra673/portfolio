@@ -70,7 +70,7 @@ const Projects = () => {
                 viewport={{ once: true }}
                 style={{ skewY: skew }}
                 className={cn(
-                  "neon-card group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-card/40 backdrop-blur-sm",
+                  "neon-card group relative flex min-w-0 flex-col overflow-hidden rounded-2xl border border-border bg-card/40 backdrop-blur-sm",
                   SPANS[index] ?? "md:col-span-3"
                 )}
               >
@@ -83,21 +83,14 @@ const Projects = () => {
                   )}
                 />
 
-                <div
-                  className={cn(
-                    "flex flex-1 flex-col",
-                    // Featured tile is wide enough to place the preview beside
-                    // the copy once there's room for it
-                    featured && "lg:grid lg:grid-cols-2 lg:items-stretch"
-                  )}
-                >
+                <div className="flex min-w-0 flex-1 flex-col">
                   {project.image && (
                     <ProjectPreview
                       src={project.image.src}
                       alt={project.image.alt}
                       projectTitle={project.title}
                       accent={project.accent}
-                      stretch={featured}
+                      ratio={featured ? "wide" : "standard"}
                     />
                   )}
 

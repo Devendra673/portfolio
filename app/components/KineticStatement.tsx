@@ -19,8 +19,8 @@ const KineticStatement = () => {
   });
 
   // Opposing drift. Ranges are in percent so they scale with viewport width.
-  const xLeft = useTransform(scrollYProgress, [0, 1], ["6%", "-14%"]);
-  const xRight = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
+  const xLeft = useTransform(scrollYProgress, [0, 1], ["4%", "-8%"]);
+  const xRight = useTransform(scrollYProgress, [0, 1], ["-6%", "6%"]);
   const captionOpacity = useTransform(
     scrollYProgress,
     [0.15, 0.4, 0.7, 0.9],
@@ -39,10 +39,12 @@ const KineticStatement = () => {
       </h2>
 
       <div className="flex flex-col gap-1 sm:gap-2">
+        {/* Sized so each line very nearly fills the viewport width: large
+            enough to feel oversized, without clipping most of the words. */}
         <motion.p
           aria-hidden
           style={{ x: xLeft }}
-          className="whitespace-nowrap text-[13vw] font-bold leading-[0.95] tracking-tighter text-foreground/90 sm:text-[11vw]"
+          className="whitespace-nowrap text-[10vw] font-bold leading-[0.95] tracking-tighter text-foreground/90 sm:text-[8.5vw]"
         >
           {kineticStatement.lines[0]}
         </motion.p>
@@ -50,7 +52,7 @@ const KineticStatement = () => {
         <motion.p
           aria-hidden
           style={{ x: xRight }}
-          className="text-gradient whitespace-nowrap text-[13vw] font-bold leading-[0.95] tracking-tighter sm:text-[11vw]"
+          className="text-gradient whitespace-nowrap text-[10vw] font-bold leading-[0.95] tracking-tighter sm:text-[8.5vw]"
         >
           {kineticStatement.lines[1]}
         </motion.p>
