@@ -55,7 +55,7 @@ const Stats = () => {
             transition={{ duration: 0.4, delay: i * 0.08 }}
             className="text-center"
           >
-            <dd className="font-mono text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+            <dd className="text-gradient font-mono text-3xl font-bold tracking-tight sm:text-4xl">
               <span className="sr-only">{stat.value}</span>
               <AnimatedCounter value={stat.value} inView={inView} />
             </dd>

@@ -17,30 +17,44 @@
   --font-mono: var(--font-geist-mono);
 }
 
+/* ---------------------------------------------------------------
+   Theme: Neon Dusk
+   Night-sky charcoal with violet -> pink neon accents.
+   --------------------------------------------------------------- */
+
 :root {
-  --background: #ffffff;
-  --foreground: #111111;
-  --primary: #0ea5e9;
+  /* Light mode: warm daylight, still violet-led */
+  --background: #faf8f7;
+  --foreground: #17151c;
+  --primary: #7c3aed;
   --primary-foreground: #ffffff;
-  --muted: #f8fafc;
-  --muted-foreground: #64748b;
-  --border: #e2e8f0;
-  --accent: #06b6d4;
+  --muted: #f3f0f4;
+  --muted-foreground: #6b6577;
+  --border: #e6e1ea;
+  --accent: #db2777;
   --accent-foreground: #ffffff;
   --card: #ffffff;
+
+  /* Neon glow strength, tuned down for light backgrounds */
+  --glow-a: rgba(124, 58, 237, 0.16);
+  --glow-b: rgba(219, 39, 119, 0.12);
 }
 
 .dark {
-  --background: #050505;
-  --foreground: #eee;
-  --primary: #38bdf8;
-  --primary-foreground: #050505;
-  --muted: #0c0c0c;
-  --muted-foreground: #94a3b8;
-  --border: #1e293b;
-  --accent: #22d3ee;
-  --accent-foreground: #050505;
-  --card: #0a0a0a;
+  /* Deep night sky, not flat black */
+  --background: #0d0d12;
+  --foreground: #e8e8ed;
+  --primary: #a855f7;
+  --primary-foreground: #0d0d12;
+  --muted: #16161d;
+  --muted-foreground: #7a7a8c;
+  --border: #22222e;
+  --accent: #ec4899;
+  --accent-foreground: #0d0d12;
+  --card: #14141a;
+
+  --glow-a: rgba(168, 85, 247, 0.22);
+  --glow-b: rgba(236, 72, 153, 0.16);
 }
 
 html {
@@ -54,14 +68,6 @@ body {
   font-family: var(--font-geist-sans), system-ui, sans-serif;
 }
 
-/* Gradient text utility */
-.text-gradient {
-  background: linear-gradient(135deg, var(--primary), var(--accent));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
 /* Keyboard focus visibility */
 :focus-visible {
   outline: 2px solid var(--primary);
@@ -69,12 +75,94 @@ body {
   border-radius: 4px;
 }
 
-/* Micro-interactions */
-a {
-  transition: color 0.2s ease;
+/* ---------------------------------------------------------------
+   Neon utilities
+   --------------------------------------------------------------- */
+
+/* Violet -> pink gradient text */
+.text-gradient {
+  background: linear-gradient(115deg, var(--primary), var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-/* Animated underline links */
+/* Gradient fill for primary buttons */
+.btn-neon {
+  background: linear-gradient(115deg, var(--primary), var(--accent));
+  color: var(--primary-foreground);
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  transition: box-shadow 0.35s ease, transform 0.2s ease;
+}
+
+.btn-neon:hover {
+  box-shadow:
+    0 0 24px var(--glow-a),
+    0 0 48px var(--glow-b);
+}
+
+/* Card that lights up like a game HUD panel on hover */
+.neon-card {
+  position: relative;
+  transition: border-color 0.35s ease, box-shadow 0.35s ease;
+}
+
+.neon-card::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    130deg,
+    transparent 20%,
+    var(--primary),
+    var(--accent),
+    transparent 80%
+  );
+  /* Show the gradient only as a hairline border */
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+.neon-card:hover::before {
+  opacity: 0.7;
+}
+
+.neon-card:hover {
+  box-shadow:
+    0 0 30px var(--glow-a),
+    inset 0 0 40px rgba(168, 85, 247, 0.03);
+}
+
+/* Faint glow beneath section labels */
+.section-label {
+  position: relative;
+  display: inline-block;
+}
+
+.section-label::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 28px;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  box-shadow: 0 0 10px var(--glow-a);
+}
+
+/* Animated link underline */
 .link-underline {
   position: relative;
 }
@@ -86,7 +174,7 @@ a {
   left: 0;
   width: 0;
   height: 1px;
-  background: var(--primary);
+  background: linear-gradient(90deg, var(--primary), var(--accent));
   transition: width 0.3s ease;
 }
 
@@ -94,27 +182,15 @@ a {
   width: 100%;
 }
 
-/* Card border glow on hover */
-.glow-border {
-  transition: box-shadow 0.4s ease, border-color 0.4s ease;
-}
-
-.glow-border:hover {
-  box-shadow: 0 0 20px rgba(56, 189, 248, 0.08);
-}
-
-/* Button press effect */
-button,
-a[class*="rounded-full"][class*="bg-primary"] {
-  transition: transform 0.1s ease, opacity 0.2s ease;
-}
-
+/* Button press feedback */
 button:active,
-a[class*="rounded-full"][class*="bg-primary"]:active {
-  transform: scale(0.97);
+a.btn-neon:active {
+  transform: scale(0.975);
 }
 
-/* Respect reduced-motion preferences */
+/* ---------------------------------------------------------------
+   Reduced motion
+   --------------------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -129,13 +205,15 @@ a[class*="rounded-full"][class*="bg-primary"]:active {
   }
 }
 
-/* Noise overlay */
+/* ---------------------------------------------------------------
+   Film grain overlay for depth
+   --------------------------------------------------------------- */
 .noise::before {
   content: "";
   position: fixed;
   inset: 0;
   z-index: 100;
   pointer-events: none;
-  opacity: 0.02;
+  opacity: 0.025;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
 }

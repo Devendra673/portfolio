@@ -11,7 +11,7 @@ const Contact = () => {
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          className="mb-16 text-xs font-medium uppercase tracking-widest text-muted-foreground"
+          className="section-label mb-16 text-xs font-medium uppercase tracking-widest text-muted-foreground"
         >
           Contact
         </motion.p>

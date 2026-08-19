@@ -37,7 +37,7 @@ const About = () => {
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          className="mb-12 text-xs font-medium uppercase tracking-widest text-muted-foreground"
+          className="section-label mb-12 text-xs font-medium uppercase tracking-widest text-muted-foreground"
         >
           About
         </motion.p>

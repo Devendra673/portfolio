@@ -53,10 +53,16 @@ const Hero = () => {
 
   return (
     <section className="relative flex min-h-[100dvh] items-center overflow-hidden px-6">
-      {/* Grid pattern overlay — the WebGL particle layer provides the depth */}
+      {/* Neon haze — distant city light bleeding into a night sky */}
+      <div aria-hidden className="pointer-events-none absolute inset-0">
+        <div className="absolute -top-24 left-1/4 h-[500px] w-[500px] rounded-full bg-primary/[0.07] blur-[120px]" />
+        <div className="absolute bottom-0 right-0 h-[420px] w-[420px] rounded-full bg-accent/[0.06] blur-[100px]" />
+      </div>
+
+      {/* Grid pattern overlay */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-[0.015]"
+        className="pointer-events-none absolute inset-0 opacity-[0.02]"
         style={{
           backgroundImage:
             "linear-gradient(var(--foreground) 1px, transparent 1px), linear-gradient(90deg, var(--foreground) 1px, transparent 1px)",
@@ -87,10 +93,12 @@ const Hero = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.1 }}
         >
-          <h1 className="font-mono text-5xl font-bold tracking-tighter text-foreground sm:text-6xl md:text-7xl lg:text-8xl">
+          <h1 className="font-mono text-5xl font-bold tracking-tighter sm:text-6xl md:text-7xl lg:text-8xl">
             {/* Real name for screen readers, scrambled version shown visually */}
             <span className="sr-only">{siteConfig.name}</span>
-            <span aria-hidden>{scrambledName}</span>
+            <span aria-hidden className="text-gradient">
+              {scrambledName}
+            </span>
           </h1>
         </motion.div>
 
@@ -134,10 +142,9 @@ const Hero = () => {
         >
           <a
             href="#contact"
-            className="group relative overflow-hidden rounded-full bg-primary px-7 py-3 text-sm font-medium text-primary-foreground transition-all"
+            className="btn-neon rounded-full px-7 py-3 text-sm font-medium"
           >
-            <span className="relative z-10">Get in touch</span>
-            <span className="absolute inset-0 -translate-x-full bg-accent transition-transform duration-300 group-hover:translate-x-0" />
+            Get in touch
           </a>
           <a
             href={siteConfig.resumeUrl}

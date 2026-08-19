@@ -36,15 +36,22 @@ const vertexShader = /* glsl */ `
 
   attribute float aScale;
   attribute float aSpeed;
+  attribute float aReveal;
 
   varying float vAlpha;
+  varying float vEnergy;
 
   void main() {
     vec3 p = position;
 
-    // Gentle vertical drift, unique per particle
-    p.y += sin(uTime * aSpeed + p.x * 0.5) * 0.35 * uMotion;
-    p.x += cos(uTime * aSpeed * 0.7 + p.z * 0.5) * 0.25 * uMotion;
+    // Energy ramps up as the page scrolls: quiet and open at the top,
+    // busier further down. Mirrors moving from a village to a city.
+    float energy = 0.35 + uScroll * 0.65;
+
+    // Gentle vertical drift, unique per particle, faster as energy rises
+    float t = uTime * (0.6 + energy * 0.8);
+    p.y += sin(t * aSpeed + p.x * 0.5) * 0.35 * uMotion;
+    p.x += cos(t * aSpeed * 0.7 + p.z * 0.5) * 0.25 * uMotion;
 
     // Parallax: particles nearer the camera react more to the pointer
     float depth = (p.z + 12.0) / 24.0;
@@ -63,7 +70,13 @@ const vertexShader = /* glsl */ `
     // Fade particles as they approach the camera or drift far away
     float distanceFade = smoothstep(0.0, 6.0, -mvPosition.z);
     float farFade = 1.0 - smoothstep(26.0, 38.0, -mvPosition.z);
-    vAlpha = distanceFade * farFade;
+
+    // Each particle has its own reveal threshold, so the field fills in
+    // progressively rather than all at once.
+    float revealed = smoothstep(aReveal - 0.25, aReveal, energy);
+
+    vAlpha = distanceFade * farFade * revealed;
+    vEnergy = energy;
   }
 `;
 
@@ -72,6 +85,7 @@ const fragmentShader = /* glsl */ `
   uniform vec3 uColorB;
 
   varying float vAlpha;
+  varying float vEnergy;
 
   void main() {
     // Soft radial falloff -> round, glowing point
@@ -83,7 +97,9 @@ const fragmentShader = /* glsl */ `
     float glow = 1.0 - smoothstep(0.0, 0.5, d);
     glow = pow(glow, 1.5);
 
-    vec3 color = mix(uColorA, uColorB, smoothstep(0.0, 0.5, d));
+    // Violet at the core, shifting toward pink at the edges and with energy
+    float hueShift = smoothstep(0.0, 0.5, d) * 0.6 + vEnergy * 0.4;
+    vec3 color = mix(uColorA, uColorB, clamp(hueShift, 0.0, 1.0));
 
     gl_FragColor = vec4(color, glow * vAlpha);
   }
@@ -103,10 +119,11 @@ const Field = ({ count, motion, scrollRef }: FieldProps) => {
   const { size } = useThree();
 
   // Geometry attributes are generated once and never re-allocated
-  const { positions, scales, speeds } = useMemo(() => {
+  const { positions, scales, speeds, reveals } = useMemo(() => {
     const positions = new Float32Array(count * 3);
     const scales = new Float32Array(count);
     const speeds = new Float32Array(count);
+    const reveals = new Float32Array(count);
 
     for (let i = 0; i < count; i++) {
       positions[i * 3] = (seededRandom(i * 4) - 0.5) * 46;
@@ -115,9 +132,12 @@ const Field = ({ count, motion, scrollRef }: FieldProps) => {
 
       scales[i] = seededRandom(i * 4 + 3) * 0.55 + 0.12;
       speeds[i] = seededRandom(i * 7 + 11) * 0.5 + 0.15;
+      // Reveal threshold: lower values are visible from the start, higher
+      // values only appear once scroll energy builds.
+      reveals[i] = seededRandom(i * 13 + 29);
     }
 
-    return { positions, scales, speeds };
+    return { positions, scales, speeds, reveals };
   }, [count]);
 
   const uniforms = useMemo(
@@ -127,8 +147,9 @@ const Field = ({ count, motion, scrollRef }: FieldProps) => {
       uPointer: { value: new THREE.Vector2(0, 0) },
       uSize: { value: 9 },
       uMotion: { value: motion },
-      uColorA: { value: new THREE.Color("#67e8f9") },
-      uColorB: { value: new THREE.Color("#0ea5e9") },
+      // Neon Dusk: violet core shifting to hot pink
+      uColorA: { value: new THREE.Color("#a855f7") },
+      uColorB: { value: new THREE.Color("#ec4899") },
     }),
     [motion]
   );
@@ -174,6 +195,7 @@ const Field = ({ count, motion, scrollRef }: FieldProps) => {
         <bufferAttribute attach="attributes-position" args={[positions, 3]} />
         <bufferAttribute attach="attributes-aScale" args={[scales, 1]} />
         <bufferAttribute attach="attributes-aSpeed" args={[speeds, 1]} />
+        <bufferAttribute attach="attributes-aReveal" args={[reveals, 1]} />
       </bufferGeometry>
       <shaderMaterial
         ref={materialRef}

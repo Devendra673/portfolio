@@ -16,7 +16,7 @@ const Projects = () => {
           viewport={{ once: true }}
           className="mb-16"
         >
-          <p className="text-xs font-medium uppercase tracking-widest text-muted-foreground">
+          <p className="section-label text-xs font-medium uppercase tracking-widest text-muted-foreground">
             Selected Work
           </p>
           <p className="mt-4 max-w-xl text-sm text-muted-foreground">
@@ -35,7 +35,7 @@ const Projects = () => {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.08 }}
               viewport={{ once: true }}
-              className="group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-card/40 backdrop-blur-sm transition-colors duration-300 hover:border-primary/40"
+              className="neon-card group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-card/40 backdrop-blur-sm"
             >
               {/* Accent bar */}
               <span

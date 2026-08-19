@@ -12,7 +12,7 @@ const Experience = () => {
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          className="mb-16 text-xs font-medium uppercase tracking-widest text-muted-foreground"
+          className="section-label mb-16 text-xs font-medium uppercase tracking-widest text-muted-foreground"
         >
           Experience
         </motion.p>
@@ -25,7 +25,7 @@ const Experience = () => {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: i * 0.08 }}
               viewport={{ once: true }}
-              className="group rounded-2xl border border-border bg-card/40 p-6 backdrop-blur-sm transition-colors duration-300 hover:border-primary/40 sm:p-8"
+              className="neon-card group rounded-2xl border border-border bg-card/40 p-6 backdrop-blur-sm sm:p-8"
             >
               {/* Header */}
               <div className="flex flex-col gap-2 sm:flex-row sm:items-baseline sm:justify-between">

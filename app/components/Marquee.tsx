@@ -24,7 +24,7 @@ const Marquee = () => {
             className="flex items-center whitespace-nowrap px-6 text-sm font-medium text-muted-foreground/40"
           >
             {item}
-            <span className="ml-6 text-primary/30">/</span>
+            <span className="ml-6 text-accent/40">/</span>
           </span>
         ))}
       </motion.div>
