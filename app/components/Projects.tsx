@@ -38,7 +38,7 @@ const Projects = () => {
 
   return (
     <section id="projects" className="px-6 py-28">
-      <div className="mx-auto max-w-6xl">
+      <div className="mx-auto max-w-5xl">
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
@@ -97,6 +97,7 @@ const Projects = () => {
                       alt={project.image.alt}
                       projectTitle={project.title}
                       accent={project.accent}
+                      stretch={featured}
                     />
                   )}
 

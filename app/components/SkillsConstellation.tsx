@@ -125,7 +125,7 @@ const SkillsConstellation = () => {
 
   return (
     <section id="skills" className="px-6 py-28">
-      <div className="mx-auto max-w-6xl">
+      <div className="mx-auto max-w-5xl">
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}

@@ -12,6 +12,12 @@ interface ProjectPreviewProps {
   projectTitle: string;
   /** Tailwind gradient classes shown behind the image before it reveals. */
   accent: string;
+  /**
+   * When the preview sits beside the copy (featured tile), it needs to fill the
+   * full height of its grid cell instead of holding a 16:9 box, otherwise the
+   * taller text column leaves a gap under the image.
+   */
+  stretch?: boolean;
 }
 
 const ProjectPreview = ({
@@ -19,6 +25,7 @@ const ProjectPreview = ({
   alt,
   projectTitle,
   accent,
+  stretch = false,
 }: ProjectPreviewProps) => {
   const [open, setOpen] = useState(false);
 
@@ -44,7 +51,14 @@ const ProjectPreview = ({
       <button
         onClick={() => setOpen(true)}
         aria-label={`Enlarge ${projectTitle} screenshot: ${alt}`}
-        className="relative block aspect-[16/9] w-full overflow-hidden border-b border-border"
+        className={cn(
+          "relative block w-full overflow-hidden border-border",
+          // Side-by-side: drop the fixed ratio and fill the cell, moving the
+          // divider from the bottom edge to the right edge.
+          stretch
+            ? "aspect-[16/9] border-b lg:aspect-auto lg:h-full lg:min-h-full lg:border-b-0 lg:border-r"
+            : "aspect-[16/9] border-b"
+        )}
       >
         {/* Accent wash sits behind, visible until the image reveals */}
         <span
@@ -64,7 +78,11 @@ const ProjectPreview = ({
             src={src}
             alt=""
             fill
-            sizes="(max-width: 768px) 100vw, 560px"
+            sizes={
+              stretch
+                ? "(max-width: 1024px) 100vw, 512px"
+                : "(max-width: 768px) 100vw, 420px"
+            }
             className="object-cover object-top"
           />
         </span>
