@@ -189,6 +189,112 @@ a.btn-neon:active {
 }
 
 /* ---------------------------------------------------------------
+   Background: aurora light pools, skyline bars, perspective grid
+   --------------------------------------------------------------- */
+
+.aurora {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(90px);
+  will-change: transform;
+}
+
+.aurora-a {
+  top: -12%;
+  left: 8%;
+  width: 46vw;
+  height: 46vw;
+  background: radial-gradient(circle, var(--glow-a) 0%, transparent 68%);
+  animation: drift-a 26s ease-in-out infinite alternate;
+}
+
+.aurora-b {
+  top: 22%;
+  right: -8%;
+  width: 40vw;
+  height: 40vw;
+  background: radial-gradient(circle, var(--glow-b) 0%, transparent 68%);
+  animation: drift-b 32s ease-in-out infinite alternate;
+}
+
+.aurora-c {
+  bottom: 4%;
+  left: 26%;
+  width: 52vw;
+  height: 38vw;
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--glow-a) 60%, var(--glow-b)) 0%,
+    transparent 70%
+  );
+  animation: drift-c 38s ease-in-out infinite alternate;
+}
+
+@keyframes drift-a {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  to {
+    transform: translate3d(8vw, 6vh, 0) scale(1.12);
+  }
+}
+
+@keyframes drift-b {
+  from {
+    transform: translate3d(0, 0, 0) scale(1.08);
+  }
+  to {
+    transform: translate3d(-10vw, -5vh, 0) scale(0.95);
+  }
+}
+
+@keyframes drift-c {
+  from {
+    transform: translate3d(0, 0, 0) scale(0.98);
+  }
+  to {
+    transform: translate3d(6vw, -7vh, 0) scale(1.15);
+  }
+}
+
+/* Faint grid for structure */
+.bg-grid {
+  background-image:
+    linear-gradient(var(--foreground) 1px, transparent 1px),
+    linear-gradient(90deg, var(--foreground) 1px, transparent 1px);
+  background-size: 64px 64px;
+  opacity: 0.018;
+  mask-image: linear-gradient(to bottom, #000 0%, transparent 75%);
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, transparent 75%);
+}
+
+/* Distant window lights along the bottom edge.
+   Flicker animates brightness rather than opacity, so it doesn't fight the
+   per-bar opacity set inline on each element. */
+.skyline-bar {
+  background: linear-gradient(
+    to top,
+    var(--accent) 0%,
+    var(--primary) 55%,
+    transparent 100%
+  );
+  animation: flicker 9s ease-in-out infinite;
+}
+
+@keyframes flicker {
+  0%,
+  100% {
+    filter: brightness(1);
+  }
+  47% {
+    filter: brightness(0.5);
+  }
+  54% {
+    filter: brightness(1.15);
+  }
+}
+
+/* ---------------------------------------------------------------
    Reduced motion
    --------------------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {

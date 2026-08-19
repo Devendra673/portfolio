@@ -10,12 +10,12 @@ import Education from "./components/Education";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 import ScrollProgress from "./components/ScrollProgress";
-import SceneBackground from "./components/webgl/SceneBackground";
+import AuroraBackground from "./components/AuroraBackground";
 
 export default function Home() {
   return (
     <div className="noise">
-      <SceneBackground />
+      <AuroraBackground />
       <ScrollProgress />
       <Header />
       <main id="main" className="relative z-10">
