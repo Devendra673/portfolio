@@ -140,8 +140,10 @@ export const skillEdges: ReadonlyArray<readonly [string, string]> = [
 
 export interface SocialLink {
   name: string;
+  /** Displayed under the name, e.g. "@Devendra673" */
+  handle: string;
   url: string;
-  icon: string;
+  icon: "github" | "linkedin";
 }
 
 export const siteConfig = {
@@ -415,11 +417,13 @@ export const education: Education[] = [
 export const socialLinks: SocialLink[] = [
   {
     name: "GitHub",
+    handle: "@Devendra673",
     url: "https://github.com/Devendra673",
     icon: "github",
   },
   {
     name: "LinkedIn",
+    handle: "in/devendra",
     url: "https://www.linkedin.com/in/devendra-664a02306",
     icon: "linkedin",
   },
