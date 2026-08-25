@@ -184,7 +184,7 @@ def build():
     s.append(section("Education"))
     s.append(Paragraph(
         "<b>Master of Computer Applications (MCA)</b> | Dr. Ambedkar Institute of Technology, Bangalore | "
-        "2024 - 2026 | CGPA 8.32/10", style_body))
+        "2024 - 2026 | CGPA 8.63/10", style_body))
     s.append(Paragraph(
         "<b>Bachelor of Computer Applications (BCA)</b> | AES National Degree College, Gauribidanur | "
         "2021 - 2024 | CGPA 9.01/10", style_body))

@@ -402,8 +402,7 @@ export const education: Education[] = [
     institution: "Dr. Ambedkar Institute of Technology (Dr. AIT)",
     location: "Bangalore",
     period: "2024 — 2026",
-    score: "CGPA 8.32 / 10",
-    status: "Awaiting results",
+    score: "CGPA 8.63 / 10",
   },
   {
     degree: "Bachelor of Computer Applications (BCA)",
