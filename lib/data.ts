@@ -14,6 +14,10 @@ export interface Project {
   image?: { src: string; alt: string };
   /** Featured projects occupy a larger tile in the bento grid. */
   featured?: boolean;
+  /** Single headline metric surfaced as a badge for skim-readers. */
+  metric?: { value: string; label: string };
+  /** Shown when there's no public source link, explaining why. */
+  privateNote?: string;
 }
 
 /**
@@ -233,6 +237,9 @@ export const projects: Project[] = [
       "Sending every request to an LLM would have made the product expensive to run and slow. I kept all scoring and skill matching deterministic and local via FAISS and embeddings, so analysis is free and instant, and reserved paid Bedrock calls for generative features only — with per-token spend tracked on a usage endpoint.",
     tech: ["FastAPI", "Next.js", "FAISS", "AWS Bedrock", "Docker"],
     accent: "from-sky-400 to-cyan-400",
+    metric: { value: "57", label: "REST endpoints, deployed to AWS" },
+    privateNote:
+      "Private — client deliverable for DigitalTransols. Happy to walk through the code live.",
     image: {
       src: "/projects/resumeiq-analyzer.png",
       alt: "ResumeIQ analyzer landing page showing a 54 percent match score and job description keyword coverage",
@@ -255,6 +262,7 @@ export const projects: Project[] = [
     tech: ["Python", "Flask", "scikit-learn", "ESP32", "SQLite"],
     sourceUrl: "https://github.com/Devendra673/IOT-Air_Monitor-ML",
     accent: "from-emerald-400 to-teal-400",
+    metric: { value: "95%+", label: "forecast accuracy, 5-fold CV" },
     image: {
       src: "/projects/iot-login.png",
       alt: "IoT Air Quality Monitoring System sign-in screen with username or mobile number login",
@@ -277,6 +285,7 @@ export const projects: Project[] = [
     tech: ["Python", "Flask", "Whisper", "Gemini AI", "FFmpeg"],
     sourceUrl: "https://github.com/Devendra673/Dubify-ai",
     accent: "from-violet-400 to-fuchsia-400",
+    metric: { value: "22+", label: "Indian languages supported" },
     image: {
       src: "/projects/dubify-upload.png",
       alt: "Dubify AI upload screen accepting MP4, MP3, WAV and AVI files for translation across 22 plus Indian languages",
@@ -299,6 +308,9 @@ export const projects: Project[] = [
     tech: ["FastAPI", "Next.js", "FAISS", "Ollama", "NLI", "BM25"],
     accent: "from-amber-400 to-orange-400",
     featured: true,
+    metric: { value: "P@1 1.000", label: "hybrid retrieval precision" },
+    privateNote:
+      "Private — MCA thesis project. Happy to walk through the code and evaluation live.",
     image: {
       src: "/projects/securehall-chat.png",
       alt: "SecureHall-RAG chat interface with ten policy documents loaded in the knowledge base and suggested starter questions",
@@ -311,6 +323,19 @@ export const about = {
     "I build intelligent systems that bridge machine learning and real users — from NLP pipelines and secure RAG to IoT platforms and speech tech.",
   subtext:
     "Python ML backends • TypeScript frontends • C++ edge firmware • Containerized deployments. I take problems from raw data to polished interfaces.",
+};
+
+/**
+ * What I'm actively learning right now. Kept honest and current — these are
+ * things I'm building with, not things I've mastered.
+ */
+export const nowLearning = {
+  items: [
+    "LangChain & LangGraph for agentic LLM workflows",
+    "Infrastructure as code with Terraform",
+    "Real-time systems with Node.js and WebSockets",
+  ],
+  note: "Closing the gap between research-style ML work and production infrastructure.",
 };
 
 /**

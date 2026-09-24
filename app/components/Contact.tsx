@@ -32,26 +32,31 @@ const LinkedinMark = ({ size = 18 }: { size?: number }) => (
   </svg>
 );
 
-/** Local time in Bangalore, so a visitor knows whether it's a sensible hour. */
+const formatIST = () =>
+  new Intl.DateTimeFormat("en-IN", {
+    timeZone: "Asia/Kolkata",
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  }).format(new Date());
+
+/**
+ * Local time in Bangalore, so a visitor knows whether it's a sensible hour.
+ *
+ * Starts null (server has no meaningful "now" for the client's render) and is
+ * filled on mount, then refreshed each minute. Rendered with a fixed-width
+ * fallback so the layout never shifts.
+ */
 const useLocalTime = () => {
   const [time, setTime] = useState<string | null>(null);
 
   useEffect(() => {
-    const format = () =>
-      new Intl.DateTimeFormat("en-IN", {
-        timeZone: "Asia/Kolkata",
-        hour: "numeric",
-        minute: "2-digit",
-        hour12: true,
-      }).format(new Date());
-
-    // First write happens in a frame callback so state is never set
-    // synchronously during the effect pass.
-    const raf = requestAnimationFrame(() => setTime(format()));
-    const interval = window.setInterval(() => setTime(format()), 30_000);
-
+    // Kick off on the next tick so the first write isn't synchronous inside
+    // the effect body, then refresh on an interval.
+    const id = window.setTimeout(() => setTime(formatIST()), 0);
+    const interval = window.setInterval(() => setTime(formatIST()), 30_000);
     return () => {
-      cancelAnimationFrame(raf);
+      window.clearTimeout(id);
       window.clearInterval(interval);
     };
   }, []);

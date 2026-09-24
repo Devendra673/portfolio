@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight, ExternalLink } from "lucide-react";
+import { ArrowRight, ExternalLink, Lock } from "lucide-react";
 import { projects } from "@/lib/data";
 import { cn } from "@/lib/utils";
 import { useScrollSkew } from "@/lib/useScrollSkew";
@@ -104,14 +104,28 @@ const Projects = () => {
                       </span>
                     </div>
 
-                    <h3
-                      className={cn(
-                        "font-bold tracking-tight text-foreground",
-                        featured ? "text-2xl sm:text-3xl" : "text-xl"
+                    <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+                      <h3
+                        className={cn(
+                          "font-bold tracking-tight text-foreground",
+                          featured ? "text-2xl sm:text-3xl" : "text-xl"
+                        )}
+                      >
+                        {project.title}
+                      </h3>
+
+                      {/* Headline metric for skim-readers */}
+                      {project.metric && (
+                        <span className="inline-flex items-baseline gap-1.5 rounded-full border border-primary/30 bg-primary/5 px-3 py-1">
+                          <span className="text-gradient font-mono text-xs font-bold">
+                            {project.metric.value}
+                          </span>
+                          <span className="text-[10px] text-muted-foreground">
+                            {project.metric.label}
+                          </span>
+                        </span>
                       )}
-                    >
-                      {project.title}
-                    </h3>
+                    </div>
 
                     <p className="mt-2.5 text-sm leading-relaxed text-muted-foreground">
                       {project.description}
@@ -181,6 +195,20 @@ const Projects = () => {
                             Live demo
                           </a>
                         )}
+                      </div>
+                    )}
+
+                    {/* No public repo — explain why rather than leaving a gap */}
+                    {project.privateNote && !project.sourceUrl && (
+                      <div className="mt-5 flex items-start gap-2 border-t border-border/60 pt-4">
+                        <Lock
+                          size={12}
+                          aria-hidden
+                          className="mt-0.5 shrink-0 text-muted-foreground/60"
+                        />
+                        <p className="text-[11px] leading-relaxed text-muted-foreground/80">
+                          {project.privateNote}
+                        </p>
                       </div>
                     )}
                   </div>

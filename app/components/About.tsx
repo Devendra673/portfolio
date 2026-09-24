@@ -2,7 +2,8 @@
 
 import { useRef } from "react";
 import { motion, useScroll, useTransform, type MotionValue } from "framer-motion";
-import { about, timeline } from "@/lib/data";
+import { about, timeline, nowLearning } from "@/lib/data";
+import { Sparkles } from "lucide-react";
 
 const words = about.statement.split(" ");
 
@@ -89,6 +90,37 @@ const About = () => {
             ))}
           </div>
         </div>
+
+        {/* Currently learning */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          viewport={{ once: true }}
+          className="neon-card mt-16 rounded-2xl border border-border bg-card/40 p-6 backdrop-blur-sm sm:p-8"
+        >
+          <div className="mb-5 flex items-center gap-2.5">
+            <Sparkles size={15} aria-hidden className="text-primary" />
+            <h3 className="text-xs font-medium uppercase tracking-widest text-muted-foreground">
+              Currently Learning
+            </h3>
+          </div>
+
+          <ul className="flex flex-wrap gap-2.5">
+            {nowLearning.items.map((item) => (
+              <li
+                key={item}
+                className="rounded-full border border-border bg-background/40 px-3.5 py-1.5 text-[13px] text-foreground"
+              >
+                {item}
+              </li>
+            ))}
+          </ul>
+
+          <p className="mt-5 max-w-xl text-sm leading-relaxed text-muted-foreground">
+            {nowLearning.note}
+          </p>
+        </motion.div>
       </div>
     </section>
   );
