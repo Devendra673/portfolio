@@ -15,11 +15,11 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
-  title: "Devendra | Full Stack Developer & AI Engineer",
-  description:
-    "Full stack developer and AI engineer building intelligent systems — NLP, secure RAG, IoT with ML analytics, and collaborative AI applications.",
+  title: `Devendra | ${siteConfig.title}`,
+  description: siteConfig.description,
   keywords: [
     "Devendra",
+    "Software Engineer",
     "Full Stack Developer",
     "AI Engineer",
     "Machine Learning",
@@ -37,16 +37,14 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    title: "Devendra — Full Stack Developer & AI Engineer",
-    description:
-      "Building intelligent systems across NLP, RAG, IoT, and speech technologies. From raw data to polished interfaces.",
+    title: `Devendra — ${siteConfig.title}`,
+    description: siteConfig.description,
     siteName: "Devendra's Portfolio",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Devendra — Full Stack Developer & AI Engineer",
-    description:
-      "Building intelligent systems across NLP, RAG, IoT, and speech technologies.",
+    title: `Devendra — ${siteConfig.title}`,
+    description: siteConfig.description,
     creator: "@devendra",
   },
   robots: {
@@ -91,7 +89,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
               "@context": "https://schema.org",
               "@type": "Person",
               name: "Devendra",
-              jobTitle: "Full Stack Developer & AI Engineer",
+              jobTitle: siteConfig.title,
               email: "devendradevendra562@gmail.com",
               address: {
                 "@type": "PostalAddress",

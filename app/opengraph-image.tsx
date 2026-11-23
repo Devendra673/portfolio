@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-export const alt = "Devendra - Full Stack Developer & AI Engineer";
+export const alt = "Devendra - Software Engineer | Full Stack and AI";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -76,7 +76,7 @@ export default function OpengraphImage() {
             letterSpacing: "-1px",
           }}
         >
-          Full Stack Developer &amp; AI Engineer
+          Software Engineer | Full Stack and AI
         </div>
 
         {/* Domains */}

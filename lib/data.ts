@@ -72,14 +72,22 @@ export const skillNodes: SkillNode[] = [
   { id: "react", label: "React", group: "frontend", level: "core" },
   { id: "next", label: "Next.js", group: "frontend", level: "core" },
   { id: "tailwind", label: "Tailwind", group: "frontend", level: "core" },
+  { id: "framer", label: "Framer Motion", group: "frontend", level: "strong" },
   { id: "zustand", label: "Zustand", group: "frontend", level: "familiar" },
 
   // Backend
   { id: "fastapi", label: "FastAPI", group: "backend", level: "core" },
   { id: "flask", label: "Flask", group: "backend", level: "strong" },
   { id: "node", label: "Node.js", group: "backend", level: "familiar" },
+  { id: "express", label: "Express.js", group: "backend", level: "familiar" },
+  { id: "jwt", label: "JWT / RBAC", group: "backend", level: "strong" },
+  { id: "sse", label: "SSE", group: "backend", level: "strong" },
+  { id: "sqlalchemy", label: "SQLAlchemy", group: "backend", level: "strong" },
+  { id: "alembic", label: "Alembic", group: "backend", level: "strong" },
   { id: "sqlite", label: "SQLite", group: "backend", level: "strong" },
   { id: "postgres", label: "PostgreSQL", group: "backend", level: "familiar" },
+  { id: "mongodb", label: "MongoDB", group: "backend", level: "familiar" },
+  { id: "mysql", label: "MySQL", group: "backend", level: "familiar" },
 
   // AI / ML
   { id: "rag", label: "RAG", group: "ai", level: "core" },
@@ -87,6 +95,7 @@ export const skillNodes: SkillNode[] = [
   { id: "bm25", label: "BM25", group: "ai", level: "strong" },
   { id: "sklearn", label: "scikit-learn", group: "ai", level: "strong" },
   { id: "whisper", label: "Whisper", group: "ai", level: "strong" },
+  { id: "gemini", label: "Gemini", group: "ai", level: "strong" },
   { id: "nli", label: "NLI / DeBERTa", group: "ai", level: "strong" },
   { id: "bedrock", label: "AWS Bedrock", group: "ai", level: "strong" },
   { id: "ollama", label: "Ollama", group: "ai", level: "strong" },
@@ -94,8 +103,11 @@ export const skillNodes: SkillNode[] = [
 
   // Infra
   { id: "docker", label: "Docker", group: "infra", level: "strong" },
+  { id: "compose", label: "Docker Compose", group: "infra", level: "strong" },
   { id: "git", label: "Git", group: "infra", level: "core" },
-  { id: "aws", label: "AWS", group: "infra", level: "familiar" },
+  { id: "aws", label: "AWS EC2/S3", group: "infra", level: "familiar" },
+  { id: "postman", label: "Postman", group: "infra", level: "strong" },
+  { id: "linux", label: "Linux", group: "infra", level: "strong" },
   { id: "esp32", label: "ESP32", group: "infra", level: "familiar" },
 ];
 
@@ -121,18 +133,33 @@ export const skillEdges: ReadonlyArray<readonly [string, string]> = [
   ["ts", "react"],
   ["react", "next"],
   ["next", "tailwind"],
+  ["react", "framer"],
   ["react", "zustand"],
   ["js", "react"],
   // Data
   ["fastapi", "sqlite"],
+  ["fastapi", "sqlalchemy"],
+  ["sqlalchemy", "alembic"],
   ["flask", "sqlite"],
   ["sql", "postgres"],
+  ["sql", "mysql"],
+  ["sql", "mongodb"],
   ["sql", "sqlite"],
+  // Backend features
+  ["fastapi", "jwt"],
+  ["fastapi", "sse"],
+  ["flask", "jwt"],
+  ["node", "express"],
   // Infra
   ["docker", "fastapi"],
   ["docker", "flask"],
+  ["docker", "compose"],
   ["aws", "bedrock"],
   ["git", "docker"],
+  ["linux", "docker"],
+  ["postman", "fastapi"],
+  // AI integrations
+  ["whisper", "gemini"],
   // Hardware
   ["cpp", "esp32"],
   ["esp32", "flask"],
@@ -152,16 +179,16 @@ export interface SocialLink {
 
 export const siteConfig = {
   name: "Devendra",
-  title: "Full Stack Developer & AI Engineer",
+  title: "Software Engineer | Full Stack and AI",
   tagline: "I build intelligent systems for the web.",
   description:
-    "I develop AI-powered applications across NLP, retrieval-augmented generation, IoT, and speech technologies — bridging machine learning with clean, user-facing products.",
+    "Entry-level software engineer building full-stack AI products: Python backends, Next.js/React frontends with streaming responses, and RAG/LLM features deployed on AWS.",
   email: "devendradevendra562@gmail.com",
-  resumeUrl: "/resume.pdf",
+  resumeUrl: "/Devendra_Resume.pdf",
   github: "https://github.com/Devendra673",
   linkedin: "https://www.linkedin.com/in/devendra-664a02306",
   location: "Bangalore, India",
-  availability: "Open to full-time roles · Remote or on-site",
+  availability: "Open to full-time and internship roles, remote or on-site",
   /**
    * Canonical site URL, used for metadata, sitemap, robots and OG images.
    * Override with NEXT_PUBLIC_SITE_URL if the domain changes.
@@ -210,13 +237,13 @@ export const timeline = [
   },
   {
     year: "2025",
-    title: "Built AI Products",
-    description: "Shipped Resume-iq, Dubify-ai (team), and SecureHall-RAG. Explored production ML pipelines.",
+    title: "Shipped Dubify AI",
+    description: "Built multilingual dubbing platform with a team of three during Guruvidhya internship, covering 22+ Indian languages.",
   },
   {
     year: "2026",
-    title: "Ready for the Industry",
-    description: "MCA complete. Looking for opportunities to build intelligent systems at scale.",
+    title: "Built SecureHall-RAG & Delivered ResumeIQ",
+    description: "Completed MCA thesis (SecureHall-RAG with P@1 1.000 retrieval) and delivered ResumeIQ end-to-end at DigitalTransols AI. MCA graduated with 8.63 CGPA.",
   },
 ];
 
@@ -228,14 +255,18 @@ export const projects: Project[] = [
     description:
       "ATS optimisation platform that scores a resume against a job description, pinpoints missing skills, and rewrites weak bullets into STAR-format impact statements. 57 API endpoints behind a Next.js front end.",
     highlights: [
+      "Kanban-style application tracker with drag-and-drop status updates (Applied, Interview, Offer, Rejected)",
+      "Analytics dashboard showing application success rate, skill gap trends, and ATS score distribution",
+      "Claude Sonnet 4.5 via AWS Bedrock for bullet rewriting, cover letters and interview prep — approximately $0.003 per rewrite",
       "Five-layer skill matching — exact, alias, substring, embedding, then ontology graph — over 200+ alias mappings",
       "Four independent scorers: composite fit, experience progression, BM25 keyword density, and bullet presentation quality",
-      "Claude Sonnet 4.5 via AWS Bedrock for bullet rewriting, cover letters and interview prep",
       "PDF and DOCX export across four templates, plus a live ATS score that updates as you type",
+      "JWT authentication with bcrypt password hashing and per-user data isolation",
+      "Rate limiting on expensive endpoints to protect against abuse",
     ],
     challenge:
       "Sending every request to an LLM would have made the product expensive to run and slow. I kept all scoring and skill matching deterministic and local via FAISS and embeddings, so analysis is free and instant, and reserved paid Bedrock calls for generative features only — with per-token spend tracked on a usage endpoint.",
-    tech: ["FastAPI", "Next.js", "FAISS", "AWS Bedrock", "Docker"],
+    tech: ["FastAPI", "Next.js", "FAISS", "AWS Bedrock", "Docker", "JWT"],
     accent: "from-sky-400 to-cyan-400",
     metric: { value: "57", label: "REST endpoints, deployed to AWS" },
     privateNote:
@@ -252,10 +283,12 @@ export const projects: Project[] = [
     description:
       "Air-quality monitoring platform pairing Arduino sensors with a Flask backend. Live readings feed a Random Forest model that forecasts AQI 24 hours ahead and triggers alerts before conditions degrade.",
     highlights: [
-      "Random Forest trained on 15,000+ samples, 95%+ accuracy under 5-fold cross-validation",
+      "Random Forest trained on 15,000+ samples, 95%+ accuracy under 5-fold cross-validation, forecasting AQI 24 hours ahead",
+      "Real-time dashboard with Chart.js visualizations showing live sensor readings, historical trends, and ML predictions",
       "Arduino sketches reading MQ-135 air quality and DHT11 temperature/humidity over serial",
       "Hardened auth layer: rate limiting, account lockout, CSRF, session and device tracking",
       "Configurable AQI thresholds with Twilio SMS and WhatsApp alerts",
+      "Synthetic data fallback keeps dashboard and ML predictions fully functional without hardware",
     ],
     challenge:
       "A hardware project is useless if it only runs with hardware attached. The backend detects when no Arduino is present and generates realistic sensor data instead, so the dashboard and ML predictions stay fully demonstrable.",
@@ -279,10 +312,12 @@ export const projects: Project[] = [
       "Side-by-side original and translated text so output can be checked before dubbing",
       "Exports a dubbed MP3 track plus a timestamped .srt subtitle file",
       "Live voice translator with selectable target language for speech-to-speech translation",
+      "Flask-Login authentication with session management and user project history",
+      "Stripe integration for Pro membership with subscription-based access control",
     ],
     challenge:
       "Transcription quality collapses on noisy source audio, and everything downstream inherits the error. We added a noise-reduction and audio preprocessing stage ahead of Whisper so translation and dubbing start from a clean signal.",
-    tech: ["Python", "Flask", "Whisper", "Gemini AI", "FFmpeg"],
+    tech: ["Python", "Flask", "Whisper", "Gemini AI", "FFmpeg", "Flask-Login", "Stripe"],
     sourceUrl: "https://github.com/Devendra673/Dubify-ai",
     accent: "from-violet-400 to-fuchsia-400",
     metric: { value: "22+", label: "Indian languages supported" },
@@ -296,21 +331,25 @@ export const projects: Project[] = [
     domain: "RAG / Applied Security",
     role: "Solo project · MCA thesis",
     description:
-      "Retrieval-augmented Q&A over corporate policy documents, built on the premise that a confident wrong answer is the real failure. Runs locally through Ollama, with a verification layer that grades its own output before showing it.",
+      "Retrieval-augmented Q&A over corporate policy documents, built on the premise that a confident wrong answer is the real failure. Runs locally through Ollama, with SSE token streaming, a verification layer that grades its own output, and a reproducible evaluation harness.",
     highlights: [
       "Advanced retrieval: RAPTOR cluster summaries for global questions, multi-hop decomposition for comparative ones, and reciprocal rank fusion across LLM-generated query variants",
       "NLI entailment scoring with four-tier soft redaction — claims are flagged by support level rather than passed or killed outright",
       "Answer confidence surfaced as HIGH / MODERATE / LOW / ABSTAIN tiers, calibrated per query category and persisted across sessions",
-      "Reproducible evaluation harness: hybrid retrieval P@1 of 1.000, and semantic detection lifting the attack-block rate from 54.8% to 61.3%",
+      "SSE token streaming for real-time response display with inline citations linking back to source documents",
+      "Citation sidebar showing retrieved chunks with relevance scores and direct navigation to source pages",
+      "Admin dashboard with JWT role-based access control for user management and system configuration",
+      "Multi-turn conversation memory maintaining context across the session",
+      "Web-search fallback when local documents don't contain the answer",
+      "Reproducible evaluation: hybrid retrieval improved P@1 from 0.85 to 1.000 on a 10-document corpus, semantic detection lifted attack-block rate from 54.8% to 61.3% across 60 adversarial cases",
     ],
     challenge:
       "Binary hallucination filtering throws away usable answers — a claim with 60% support is neither a fact nor a lie. I replaced hard accept/reject with four-tier soft redaction: well-supported claims pass untouched, mid-range claims carry visible warning flags, and only genuine contradictions below 0.25 entailment are redacted. A sentence-type classifier skips non-claim sentences, cutting verification overhead by roughly 40%.",
-    tech: ["FastAPI", "Next.js", "FAISS", "Ollama", "NLI", "BM25"],
+    tech: ["FastAPI", "Next.js", "FAISS", "Ollama", "NLI", "BM25", "JWT", "SSE"],
+    sourceUrl: "https://github.com/Devendra673/SecureHall-RAG",
     accent: "from-amber-400 to-orange-400",
     featured: true,
     metric: { value: "P@1 1.000", label: "hybrid retrieval precision" },
-    privateNote:
-      "Private — MCA thesis project. Happy to walk through the code and evaluation live.",
     image: {
       src: "/projects/securehall-chat.png",
       alt: "SecureHall-RAG chat interface with ten policy documents loaded in the knowledge base and suggested starter questions",
